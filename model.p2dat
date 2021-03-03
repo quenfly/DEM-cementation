@@ -1,13 +1,14 @@
+;;;github
 New
-def wave_transform_parameters;²¨´«²¥²ÎÊı
+def wave_transform_parameters;æ³¢ä¼ æ’­å‚æ•°
    dens=2710.0;density of ball
    
    d_50=0.0013;the median size of sand
    BarDensity=2000.0;density of the bar
-   WaveSpeed=150  ;ÓÃÓÚÄ£ÄâÍ¸Éä±ß½ç
+   WaveSpeed=150  ;ç”¨äºæ¨¡æ‹Ÿé€å°„è¾¹ç•Œ
    freq=8000.0;the frequency of the wave
    num_e=4843
-   ;;;;;;;;;Ï¸¹Û²ÎÊı;;;;;;;;;;;;
+   ;;;;;;;;;ç»†è§‚å‚æ•°;;;;;;;;;;;;
    ;;sand ball;;
    damp=0.3
    hz_s=1e12
@@ -29,7 +30,7 @@ def wave_transform_parameters;²¨´«²¥²ÎÊı
 end
 @wave_transform_parameters
 
-set random 10002;°ÑËùÓĞµÄ³¤¶Èµ¥Î»¸ÄÎªm
+set random 10002;æŠŠæ‰€æœ‰çš„é•¿åº¦å•ä½æ”¹ä¸ºm
 [ext_left=0]
 [ext_right=0.3]
 [ext_lower=0]
@@ -37,7 +38,7 @@ set random 10002;°ÑËùÓĞµÄ³¤¶Èµ¥Î»¸ÄÎªm
 [area=ext_right*ext_upper]
 [ext_1=30]
 [ext_2=10]
-domain extent       [ext_left-0.1]        [ext_right+0.1]       [ext_lower-0.1]        [ext_upper+0.1];µ¥Î»m;ÕâÀï¿ÉÒÔÊÔÊÔ·Ç³£³¤µÄÊ±ºòµÄ¼ôÇĞ²¨ËÙ;·Å´óÁË10±¶
+domain extent       [ext_left-0.1]        [ext_right+0.1]       [ext_lower-0.1]        [ext_upper+0.1];å•ä½m;è¿™é‡Œå¯ä»¥è¯•è¯•éå¸¸é•¿çš„æ—¶å€™çš„å‰ªåˆ‡æ³¢é€Ÿ;æ”¾å¤§äº†10å€
 domain condition destroy
 ;cmat add 1 model hertz &
 ;            property hz_shear [hz_s] hz_poiss [hz_p] fric [fric] &
@@ -78,10 +79,10 @@ end
 set timestep fix 5e-6
 solve aratio 1e-5
 pause key
-;;;;;;;;²âÕÅÀ­Á¦
+;;;;;;;;æµ‹å¼ æ‹‰åŠ›
 ball attribute appliedforce 0 -0.19 range id 1
 ball attribute appliedforce 0 0.19 range id 2
-;;;;²â¼ôÀ­Á¦
+;;;;æµ‹å‰ªæ‹‰åŠ›
 ;ball fix vel spin range id 1
 ;ball fix spin range id 2
 ;ball attribute appliedforce 0.544 0 range id 2
