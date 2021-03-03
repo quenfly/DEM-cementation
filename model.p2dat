@@ -1,0 +1,88 @@
+New
+def wave_transform_parameters;波传播参数
+   dens=2710.0;density of ball
+   
+   d_50=0.0013;the median size of sand
+   BarDensity=2000.0;density of the bar
+   WaveSpeed=150  ;用于模拟透射边界
+   freq=8000.0;the frequency of the wave
+   num_e=4843
+   ;;;;;;;;;细观参数;;;;;;;;;;;;
+   ;;sand ball;;
+   damp=0.3
+   hz_s=1e12
+   hz_p=0.25
+   fric=0.5
+   ;;linearpbond or LCB contact model;;
+   ks=WaveSpeed*WaveSpeed* math.pi * BarDensity * d_50/2
+   dp_nratio=0.0
+   dp_sratio=0.0
+   pb_tenF=5e2
+   pb_coh=6e10
+   
+   cb_tenF=0.29
+   cb_shearF=0.78
+   ;ks=6e4
+   kn=1e6
+   ;;;;;;;other parameters;;;;;;;;;;
+   t_his=0.0012;the time of history record 
+end
+@wave_transform_parameters
+
+set random 10002;把所有的长度单位改为m
+[ext_left=0]
+[ext_right=0.3]
+[ext_lower=0]
+[ext_upper=0.1]
+[area=ext_right*ext_upper]
+[ext_1=30]
+[ext_2=10]
+domain extent       [ext_left-0.1]        [ext_right+0.1]       [ext_lower-0.1]        [ext_upper+0.1];单位m;这里可以试试非常长的时候的剪切波速;放大了10倍
+domain condition destroy
+;cmat add 1 model hertz &
+;            property hz_shear [hz_s] hz_poiss [hz_p] fric [fric] &
+;            range group sand slot 1
+;cmat default type ball-facet model linear property kn 21.0e6 fric 0.5
+;cmat apply
+cmat default model linear property kn 1e6
+ball create id 1 pos 0 0 rad 1e-3 group sand
+ball create id 2 pos 0 2.56e-3 rad 1e-3 group sand
+ball attribute density [dens] damp 0.7 
+;ball property hz_shear [hz_s] hz_poiss [hz_p]  fric 0.5
+set timestep fix 1e-5
+cycle 100
+
+def contact_change
+    loop foreach local cp contact.list.all
+        contact.group(cp)='test'
+        contact.model(cp)='linearcbond'
+    endloop 
+end
+@contact_change
+contact model linearcbond ...
+        range contact type ball-ball 
+contact property cb_tenf @cb_tenF cb_shearf @cb_shearF dp_nratio @dp_nratio dp_sratio @dp_sratio &
+        ks @ks kn @kn fric @fric range contact model linearcbond
+contact method bond ;gap 1e-5
+set timestep fix 5e-6
+cycle 100
+def focrce_apply
+    bp1=ball.find(1)
+    ;ball.force.app.x(bp)=0.05
+    ball.force.app.y(bp1)=0.03
+    bp2=ball.find(2)
+    ;ball.force.app.x(bp)=0.05
+    ball.force.app.y(bp2)=-0.03    
+end
+@focrce_apply
+set timestep fix 5e-6
+solve aratio 1e-5
+pause key
+;;;;;;;;测张拉力
+ball attribute appliedforce 0 -0.19 range id 1
+ball attribute appliedforce 0 0.19 range id 2
+;;;;测剪拉力
+;ball fix vel spin range id 1
+;ball fix spin range id 2
+;ball attribute appliedforce 0.544 0 range id 2
+solve
